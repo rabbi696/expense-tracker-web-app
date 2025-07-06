@@ -1,12 +1,12 @@
 Expense Tracker Web App<br>
-Welcome to the Expense Tracker Web App! This application is a comprehensive solution for managing personal or business finances. It allows users to easily track their income and expenses, analyze cash flow, manage debts and bills, and generate insightful reports. Whether you're an individual or a team, this app provides everything you need to stay on top of your financial situation.
+Welcome to the Expense Tracker Web App! This application is a comprehensive solution for managing personal or business finances. It allows users to easily track their income and expenses, analyze cash flow, manage debts and bills, and generate insightful reports. Whether you're an individual or a team, this app provides everything you need to stay on top of your financial situation.<br>
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://iili.io/F09Slbp.png" width="400" alt="Laravel Logo"></a></p>
-
+<br>
 Features<br>
 Core Features:<br>
 Dashboard:<br>
-Overview of financial data: Displays total expenses, total income, net cash flow, category breakdown, and recent transactions.
+Overview of financial data: Displays total expenses, total income, net cash flow, category breakdown, and recent transactions.<br>
 
 Quick Summary: Gives users an at-a-glance view of their financial health.
 <br>
@@ -72,7 +72,7 @@ Deployment: Docker, Nginx, Heroku/Netlify (depending on your choice)
 Installation<br>
 Clone the repository:<br>
 git clone https://github.com/your-username/expense-tracker-web-app.git
-<br>cd expense-tracker-web-app
+<br>cd expense-tracker-web-app<br>
 Install dependencies:
 <br>
 npm install<br>
