@@ -39,11 +39,11 @@ Track bills: Keep a record of all bills, ensuring no payment is missed.
 Invoices Management:
 Manage invoices: Create, track, and manage your invoices with detailed information.
 <br>
-User & Utility Features:
+User & Utility Features:<br>
 User Authentication:
 Login/Logout: Secure authentication to ensure privacy and security.
 <br>
-User Profile Management:
+User Profile Management:<br>
 Edit profile: Users can manage their profile details easily.
 <br>
 Password Management:
@@ -55,7 +55,7 @@ Simple calculator: Perform calculations directly within the app.
 Note-taking option: Keep a record of important notes while calculating.
 <br>
 Admin-Specific Features:<br>
-User Management:
+User Management:<br>
 Admin control: Admin users can manage other users, ensuring smooth operations and security.
 <br>
 Technology Stack<br>
@@ -69,18 +69,18 @@ Authentication: JWT (JSON Web Tokens)
 <br>
 Deployment: Docker, Nginx, Heroku/Netlify (depending on your choice)
 <br>
-Installation
+Installation<br>
 Clone the repository:<br>
 git clone https://github.com/your-username/expense-tracker-web-app.git
 <br>cd expense-tracker-web-app
 Install dependencies:
 <br>
-npm install
+npm install<br>
 Run the application:
 <br>
 npm start<br>
 Visit the app in your browser:<br>
-Open http://localhost:3000 to view the app.
+Open http://localhost:3000 to view the app.<br>
 
 How to Contribute<br>
 We welcome contributions from the open-source community! If you’d like to contribute, please follow these steps:
@@ -95,5 +95,5 @@ Push to the branch (git push origin feature-branch).
 <br>
 Create a new pull request.
 <br>
-License
+License<br>
 This project is licensed under the MIT License – see the LICENSE file for details.
