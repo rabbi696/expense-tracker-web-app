@@ -1,0 +1,32 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+// Variables
+$font-family-sans-serif: 'Poppins', sans-serif;
+
+// Colors
+$primary: #4B49AC;
+$secondary: #9893DA;
+$success: #198754;
+$info: #0dcaf0;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: #f8f9fa;
+$dark: #212529;
+
+// Body
+$body-bg: #f4f7fc;
+$body-color: #555;
+
+// Typography
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Borders
+$border-radius: 0.5rem;
+$border-color: #e9ecef;
+
+// Box shadow
+$box-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+$box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+$box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
