@@ -1,7 +1,7 @@
 Expense Tracker Web App<br>
 Welcome to the Expense Tracker Web App! This application is a comprehensive solution for managing personal or business finances. It allows users to easily track their income and expenses, analyze cash flow, manage debts and bills, and generate insightful reports. Whether you're an individual or a team, this app provides everything you need to stay on top of your financial situation.
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://iili.io/F09Slbp.png" width="400" alt="Laravel Logo"></a></p>
 
 Features<br>
 Core Features:<br>
