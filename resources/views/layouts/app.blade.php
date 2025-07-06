@@ -50,6 +50,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('users.index') }}"><i class="fas fa-users-cog icon"></i><span class="text">Manage Users</span></a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('users.create') }}"><i class="fas fa-user-plus icon"></i><span class="text">Add User</span></a>
+                        </li>
                     @endif
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('debts.index') }}"><i class="fas fa-credit-card icon"></i><span class="text">Debts</span></a>
@@ -114,6 +117,11 @@
             <main class="py-4">
                 @yield('content')
             </main>
+            <footer class="footer mt-auto py-3 bg-light">
+                <div class="container text-center">
+                    <span class="text-muted">Developed by <a href="https://golamrabbi.dev" target="_blank">Golam Rabbi</a></span>
+                </div>
+            </footer>
         </div>
     </div>
 
