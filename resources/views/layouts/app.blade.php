@@ -63,9 +63,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('incomes.index') }}"><i class="fas fa-hand-holding-usd icon"></i><span class="text">Add Money</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('invoices.index') }}"><i class="fas fa-file-invoice icon"></i><span class="text">Invoices</span></a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('notes') }}"><i class="fas fa-clipboard"></i><span class="text">Notes</span></a>
                     </li>
