@@ -37,7 +37,7 @@
                         <a class="nav-link" href="{{ route('reports.monthly') }}"><i class="fas fa-chart-pie icon"></i><span class="text">Monthly Report</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reports.user', Auth::user()->id) }}"><i class="fas fa-user-chart icon"></i><span class="text">My Report</span></a>
+                        <a class="nav-link" href="{{ route('reports.user', Auth::user()->id) }}"><i class="fas fa-chart-bar icon"></i><span class="text">My Report</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('reports.trends') }}"><i class="fas fa-chart-line icon"></i><span class="text">Expense Trends</span></a>
