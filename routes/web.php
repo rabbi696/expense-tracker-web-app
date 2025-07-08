@@ -10,6 +10,10 @@ Route::get('/calculator', function () {
     return view('calculator');
 })->name('calculator');
 
+Route::get('/notes', function () {
+    return view('notes');
+})->name('notes');
+
 Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
