@@ -73,7 +73,7 @@
                                         {{ $recentExpenses->links('pagination::bootstrap-4') }}
                                     @endif
 
-                                    <h5>Recent Income:</h5>
+                                    <h5>Add Money:</h5>
                                     @if ($recentIncomes->isEmpty())
                                         <p>No recent income.</p>
                                     @else
@@ -89,7 +89,7 @@
                                                 @foreach ($recentIncomes as $income)
                                                     <tr>
                                                         <td>{{ $income->assignedToUser ? $income->assignedToUser->name : 'N/A' }}</td>
-                                                        <td>{{ $income->created_at->format('M d, Y') }}</td>
+                                                        <td>{{ $income->date->format('M d, Y') }}</td>
                                                         <td><span class="badge bg-success rounded-pill">+৳{{ number_format($income->amount, 2) }}</span></td>
                                                     </tr>
                                                 @endforeach
