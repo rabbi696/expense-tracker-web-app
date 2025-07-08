@@ -66,9 +66,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('invoices.index') }}"><i class="fas fa-file-invoice icon"></i><span class="text">Invoices</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('calculator') }}"><i class="fas fa-calculator icon"></i><span class="text">Calculator</span></a>
-                    </li>
+                    
                 @endauth
             </ul>
         </div>
@@ -86,6 +84,11 @@
                                 </li>
                             @endif
                         @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#calculatorModal">
+                                    <i class="fas fa-calculator"></i>
+                                </a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -122,6 +125,21 @@
                     <span class="text-muted">Developed by <a href="https://golamrabbi.dev" target="_blank">Golam Rabbi</a></span>
                 </div>
             </footer>
+        </div>
+    </div>
+
+    <!-- Calculator Modal -->
+    <div class="modal fade" id="calculatorModal" tabindex="-1" aria-labelledby="calculatorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="calculatorModalLabel">Calculator</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @include('calculator')
+                </div>
+            </div>
         </div>
     </div>
 
