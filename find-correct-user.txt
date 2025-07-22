@@ -1,0 +1,34 @@
+# Find the correct user for CyberPanel
+
+# 1. Check who owns the parent directory
+ls -la /home/ | grep tracker
+
+# 2. Check current ownership of public_html
+ls -la /home/tracker.golamrabbi.dev/
+
+# 3. Find the web server user
+ps aux | grep lsphp
+
+# 4. Common CyberPanel users to try:
+# Option A - nobody:nobody (most common)
+chown -R nobody:nobody /home/tracker.golamrabbi.dev/public_html
+
+# Option B - If you see a specific user from the ls commands above, use that
+# For example, if the user is 'tracke10' or similar:
+# chown -R tracke10:tracke10 /home/tracker.golamrabbi.dev/public_html
+
+# 5. Alternative way to find the user
+# Check what user PHP is running as
+cd /home/tracker.golamrabbi.dev/public_html
+echo "<?php echo exec('whoami'); ?>" > test.php
+# Then visit: https://tracker.golamrabbi.dev/test.php
+# Delete the test file after: rm test.php
+
+# 6. If still unsure, use nobody:nobody as it's the CyberPanel default
+chown -R nobody:nobody /home/tracker.golamrabbi.dev/public_html
+
+# 7. Set proper permissions after ownership is fixed
+find /home/tracker.golamrabbi.dev/public_html -type f -exec chmod 644 {} \;
+find /home/tracker.golamrabbi.dev/public_html -type d -exec chmod 755 {} \;
+chmod -R 775 /home/tracker.golamrabbi.dev/public_html/storage
+chmod -R 775 /home/tracker.golamrabbi.dev/public_html/bootstrap/cache
