@@ -55,13 +55,13 @@
                         </li>
                     @endif
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('debts.index') }}"><i class="fas fa-credit-card icon"></i><span class="text">Debts</span></a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('bills.index') }}"><i class="fas fa-file-invoice-dollar icon"></i><span class="text">Bills</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('incomes.index') }}"><i class="fas fa-hand-holding-usd icon"></i><span class="text">Add Money</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('invoices.index') }}"><i class="fas fa-file-invoice icon"></i><span class="text">Invoices</span></a>
                     </li>
                     
                     <li class="nav-item">

@@ -6,7 +6,6 @@ use App\Exports\MonthlyReportExport;
 use App\Exports\UserReportExport;
 use App\Models\Expense;
 use App\Models\Income;
-use App\Models\Debt;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -80,39 +79,80 @@ class ReportController extends Controller
         $currentYear = Carbon::now()->year;
         $currentMonth = Carbon::now()->month;
 
-        // Get all non-admin users count
-        $userCount = User::where('role', '!=', 'admin')->count();
-
-        // Get total expenses for the current month for all non-admin users
-        $totalMonthlyExpenses = Expense::whereHas('user', function ($query) {
+        // Get all expenses for the current month (for all non-admin users)
+        $allExpenses = Expense::whereHas('user', function ($query) {
             $query->where('role', '!=', 'admin');
         })
             ->whereYear('expense_date', $currentYear)
             ->whereMonth('expense_date', $currentMonth)
             ->sum('amount');
 
-        // Calculate per user expense
-        $totalExpenses = $userCount > 0 ? $totalMonthlyExpenses / $userCount : 0;
+        // Count non-admin users
+        $userCount = User::where('role', '!=', 'admin')->count();
 
+        // Calculate per user share of expenses
+        $totalExpenses = $userCount > 0 ? $allExpenses / $userCount : 0;
+
+        // Get this user's individual expenses for display
         $expenses = $user->expenses()->with('category')
             ->whereYear('expense_date', $currentYear)
             ->whereMonth('expense_date', $currentMonth)
             ->get();
 
-        $totalIncome = $user->incomes()
+        // Calculate this user's actual total expenses
+        $userActualExpenses = $expenses->sum('amount');
+
+        $totalIncome = Income::where('assigned_to_user_id', $user->id)
             ->whereYear('date', $currentYear)
             ->whereMonth('date', $currentMonth)
             ->sum('amount');
 
-        $remainingCash = $user->monthly_allocation + $totalIncome - $totalExpenses;
+        // Get money added by all other users (for themselves)
+        $otherUsersAddedMoney = Income::whereHas('assignedToUser', function ($query) {
+                $query->where('role', '!=', 'admin');
+            })
+            ->where('assigned_to_user_id', '!=', $user->id)
+            ->whereYear('date', $currentYear)
+            ->whereMonth('date', $currentMonth)
+            ->sum('amount');
+
+        // Get income records added by other users for this user
+        $otherUsersIncomeRecords = Income::with('user')
+            ->where('assigned_to_user_id', $user->id)
+            ->where('user_id', '!=', $user->id)
+            ->whereYear('date', $currentYear)
+            ->whereMonth('date', $currentMonth)
+            ->orderBy('date', 'desc')
+            ->get();
+
+        // Get all income records for this user (from all users including self)
+        $allIncomeRecords = Income::with('user')
+            ->where('assigned_to_user_id', $user->id)
+            ->whereYear('date', $currentYear)
+            ->whereMonth('date', $currentMonth)
+            ->orderBy('date', 'desc')
+            ->get();
+
+        // Get self-added money
+        $selfAddedMoney = Income::where('assigned_to_user_id', $user->id)
+            ->where('user_id', $user->id)
+            ->whereYear('date', $currentYear)
+            ->whereMonth('date', $currentMonth)
+            ->sum('amount');
+
+        // Calculate remaining cash based on group expense logic
+        if ($totalIncome > $totalExpenses) {
+            // User has overpaid - they should get money back
+            // Calculation: Total Money Added - Share of Expenses - Money Added by Others
+            $remainingCash = $totalIncome - $totalExpenses - $otherUsersAddedMoney;
+        } else {
+            // User has underpaid - they owe money
+            // Calculation: Share of Expenses - Total Money Added
+            $remainingCash = -($totalExpenses - $totalIncome);
+        }
+        
         $dueAmount = ($remainingCash < 0) ? abs($remainingCash) : 0;
-
-        $totalOwedBy = Debt::where('debtor_id', $user->id)->where('is_settled', false)->sum('amount');
-        $totalOwedTo = Debt::where('payer_id', $user->id)->where('is_settled', false)->sum('amount');
-        $netDue = $totalOwedBy - $totalOwedTo;
-
-        $debtsOwedToUser = Debt::with('debtor', 'expense')->where('payer_id', $user->id)->where('is_settled', false)->get();
-        $debtsOwedByUser = Debt::with('payer', 'expense')->where('debtor_id', $user->id)->where('is_settled', false)->get();
+        $totalUsersDue = 0;
 
         // For category breakdown in user report
         $categoryBreakdown = collect();
@@ -125,7 +165,7 @@ class ReportController extends Controller
             }
         }
 
-        return view('reports.user', compact('user', 'totalExpenses', 'remainingCash', 'dueAmount', 'expenses', 'categoryBreakdown', 'totalOwedBy', 'totalOwedTo', 'netDue'));
+        return view('reports.user', compact('user', 'totalExpenses', 'allExpenses', 'totalIncome', 'remainingCash', 'dueAmount', 'totalUsersDue', 'expenses', 'categoryBreakdown', 'userActualExpenses', 'otherUsersAddedMoney', 'otherUsersIncomeRecords', 'allIncomeRecords', 'selfAddedMoney'));
     }
 
     public function exportUserReport(User $user, $format = 'xlsx')

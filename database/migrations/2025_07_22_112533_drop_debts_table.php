@@ -11,15 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('debts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('payer_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('debtor_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('expense_id')->nullable()->constrained('expenses')->onDelete('cascade');
-            $table->decimal('amount', 10, 2);
-            $table->boolean('is_settled')->default(false);
-            $table->timestamps();
-        });
+        Schema::dropIfExists('debts');
     }
 
     /**
@@ -27,6 +19,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('debts');
+        Schema::create('debts', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('payer_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('debtor_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('expense_id')->nullable()->constrained()->onDelete('cascade');
+            $table->decimal('amount', 10, 2);
+            $table->boolean('is_settled')->default(false);
+            $table->timestamps();
+        });
     }
 };

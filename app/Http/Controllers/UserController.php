@@ -36,7 +36,6 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'in:admin,user'],
-            'monthly_allocation' => ['nullable', 'numeric', 'min:0'],
         ]);
 
         User::create([
@@ -44,7 +43,6 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'monthly_allocation' => $request->monthly_allocation ?? 0.00,
         ]);
 
         return redirect()->route('users.index')->with('success', 'User created successfully!');
@@ -72,11 +70,10 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'monthly_allocation' => 'required|numeric|min:0',
             'role' => 'required|in:admin,user',
         ]);
 
-        $user->update($request->all());
+        $user->update(['role' => $request->role]);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully!');
     }

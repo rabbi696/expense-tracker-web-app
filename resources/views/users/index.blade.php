@@ -26,7 +26,6 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Role</th>
-                                    <th>Monthly Allocation</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -36,7 +35,6 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->role }}</td>
-                                        <td>৳{{ number_format($user->monthly_allocation, 2) }}</td>
                                         <td>
                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                         </td>

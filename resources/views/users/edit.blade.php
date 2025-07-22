@@ -35,16 +35,6 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
-                            <label for="monthly_allocation" class="form-label">Monthly Allocation</label>
-                            <input type="number" class="form-control @error('monthly_allocation') is-invalid @enderror" id="monthly_allocation" name="monthly_allocation" value="{{ old('monthly_allocation', $user->monthly_allocation) }}" step="0.01" required>
-                            @error('monthly_allocation')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-
                         <button type="submit" class="btn btn-primary">Update User</button>
                     </form>
                 </div>

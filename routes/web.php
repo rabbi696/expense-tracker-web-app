@@ -34,9 +34,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('debts', App\Http\Controllers\DebtController::class);
     Route::resource('bills', App\Http\Controllers\BillController::class);
     Route::resource('incomes', App\Http\Controllers\IncomeController::class);
+    Route::resource('invoices', App\Http\Controllers\InvoiceController::class);
     
 
     Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');

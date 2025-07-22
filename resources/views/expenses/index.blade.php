@@ -80,6 +80,10 @@
                     @if ($expenses->isEmpty())
                         <p>No expenses recorded yet. Start by adding a new one!</p>
                     @else
+                        <div class="alert alert-info mb-3">
+                            <strong>Filtered Total:</strong> ৳{{ number_format($filteredTotal, 2) }}
+                            <small class="text-muted">({{ $expenses->total() }} expenses found)</small>
+                        </div>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -116,6 +120,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        {{ $expenses->withQueryString()->links() }}
                     @endif
                 </div>
             </div>

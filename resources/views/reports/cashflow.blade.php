@@ -33,6 +33,9 @@
                         <p><strong>Total Income:</strong> ৳{{ number_format($totalIncome, 2) }}</p>
                         <p><strong>Total Expenses:</strong> ৳{{ number_format($totalExpenses, 2) }}</p>
                         <p><strong>Net Cash Flow:</strong> ৳{{ number_format($netCashFlow, 2) }}</p>
+                        @if ($totalIncome > $totalExpenses)
+                            <p class="text-success"><strong>Remaining Cash:</strong> ৳{{ number_format($totalIncome - $totalExpenses, 2) }}</p>
+                        @endif
                     </div>
                 </div>
             </div>

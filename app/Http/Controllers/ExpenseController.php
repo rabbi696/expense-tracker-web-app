@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Debt;
 use App\Models\Expense;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -64,11 +63,14 @@ class ExpenseController extends Controller
             $expensesQuery->where('purchase_from', $request->purchase_from);
         }
 
-        $expenses = $expensesQuery->latest('expense_date')->get();
+        $expenses = $expensesQuery->latest('expense_date')->paginate(15);
         $categories = Category::all();
         $users = User::all();
+        
+        // Calculate total based on filters
+        $filteredTotal = $expensesQuery->sum('amount');
 
-        return view('expenses.index', compact('expenses', 'categories', 'users', 'request'));
+        return view('expenses.index', compact('expenses', 'categories', 'users', 'request', 'filteredTotal'));
     }
 
     /**
@@ -116,24 +118,7 @@ class ExpenseController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        if ($expense->is_group_expense && ! empty($request->group_members)) {
-            $payer = Auth::user();
-            $nonAdminUsers = User::where('role', '!=', 'admin')->get();
-            $totalParticipants = $nonAdminUsers->count();
-            $shareAmount = $expense->amount / $totalParticipants;
-
-            $payer = Auth::user();
-            foreach ($nonAdminUsers as $member) {
-                if ($member->id != $payer->id) { // Don't create debt for self
-                    Debt::create([
-                        'payer_id' => $payer->id,
-                        'debtor_id' => $member->id,
-                        'expense_id' => $expense->id,
-                        'amount' => $shareAmount,
-                    ]);
-                }
-            }
-        }
+        // Group expense logic can be added here if needed in the future
 
         return redirect()->route('expenses.index')->with('success', 'Expense added successfully!');
     }
@@ -200,27 +185,7 @@ class ExpenseController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        // Handle debt updates for group expenses
-        if ($expense->is_group_expense) {
-            // Delete existing debts for this expense
-            Debt::where('expense_id', $expense->id)->delete();
-
-            $nonAdminUsers = User::where('role', '!=', 'admin')->get();
-            $totalParticipants = $nonAdminUsers->count();
-            $shareAmount = $expense->amount / $totalParticipants;
-
-            $payer = Auth::user();
-            foreach ($nonAdminUsers as $member) {
-                if ($member->id != $payer->id) { // Don't create debt for self
-                    Debt::create([
-                        'payer_id' => $payer->id,
-                        'debtor_id' => $member->id,
-                        'expense_id' => $expense->id,
-                        'amount' => $shareAmount,
-                    ]);
-                }
-            }
-        }
+        // Group expense logic can be added here if needed in the future
 
         return redirect()->route('expenses.index')->with('success', 'Expense updated successfully!');
     }
@@ -235,8 +200,6 @@ class ExpenseController extends Controller
         if ($expense->receipt_path) {
             Storage::disk('public')->delete($expense->receipt_path);
         }
-        // Delete associated debts
-        Debt::where('expense_id', $expense->id)->delete();
 
         $expense->delete();
 
