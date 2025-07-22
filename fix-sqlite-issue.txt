@@ -1,0 +1,55 @@
+# IMMEDIATE FIX FOR SQLITE ISSUE
+
+Run these commands on your CyberPanel server:
+
+cd /home/tracker.golamrabbi.dev/public_html
+
+# 1. First, let's check if DB_CONNECTION is properly set in .env
+grep "DB_CONNECTION" .env
+
+# If it shows DB_CONNECTION=mysql, continue. If not, add it:
+# echo "DB_CONNECTION=mysql" >> .env
+
+# 2. Clear ALL cached configurations
+rm -f bootstrap/cache/config.php
+rm -f bootstrap/cache/routes.php
+rm -f bootstrap/cache/packages.php
+rm -f bootstrap/cache/services.php
+
+# 3. Clear framework cache manually
+rm -rf storage/framework/cache/data/*
+rm -rf storage/framework/sessions/*
+rm -rf storage/framework/views/*
+
+# 4. Now let's temporarily use file cache instead of database cache
+# Edit your .env file and change:
+# CACHE_STORE=database
+# to:
+# CACHE_STORE=file
+
+sed -i 's/CACHE_STORE=database/CACHE_STORE=file/g' .env
+
+# 5. Regenerate config cache
+php artisan config:cache
+
+# 6. Now cache:clear should work
+php artisan cache:clear
+
+# 7. Continue with other artisan commands
+php artisan route:cache
+php artisan view:cache
+
+# 8. Run migrations
+php artisan migrate --force
+
+# 9. Fix permissions
+chmod -R 755 storage bootstrap/cache
+chown -R nobody:nobody /home/tracker.golamrabbi.dev/public_html
+
+# 10. Test the site
+echo "Visit: https://tracker.golamrabbi.dev"
+
+# OPTIONAL: If you want to switch back to database cache later
+# After the site is working, you can:
+# 1. Edit .env and change CACHE_STORE back to 'database'
+# 2. Run: php artisan config:cache
