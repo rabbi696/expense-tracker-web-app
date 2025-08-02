@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\Expense;
+use App\Models\Income;
 use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -104,6 +105,16 @@ class BillController extends Controller
                 'category_id' => Category::firstOrCreate(['name' => 'Bills'])->id,
                 'bill_id' => $bill->id, // Associate the expense with the bill
             ]);
+
+            // Create corresponding income record to balance the cash flow
+            // This represents the money that was added to pay for this bill
+            Income::create([
+                'amount' => $bill->amount,
+                'description' => 'Money added for bill: ' . $bill->name,
+                'date' => $bill->due_date,
+                'user_id' => Auth::id(), // Who added the money
+                'assigned_to_user_id' => $request->assigned_to_user_id, // Who the money is for
+            ]);
         } else if (!$request->has('is_paid') || !$request->is_paid) {
             // If the bill is unmarked as paid, delete the associated expense
             $deletedCount = Expense::where('bill_id', $bill->id)->delete();
@@ -114,6 +125,11 @@ class BillController extends Controller
                        ->where('description', 'LIKE', 'Bill payment: %' . $bill->name . '%')
                        ->delete();
             }
+
+            // Also delete the corresponding income record
+            Income::where('amount', $bill->amount)
+                  ->where('description', 'LIKE', 'Money added for bill: %' . $bill->name . '%')
+                  ->delete();
         }
 
         return redirect()->route('bills.index')->with('success', 'Bill updated successfully!');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Expense;
+use App\Models\Income;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -116,6 +117,16 @@ class ExpenseController extends Controller
             'is_group_expense' => $request->has('is_group_expense'),
             'purchase_from' => $request->purchase_from,
             'category_id' => $request->category_id,
+        ]);
+
+        // Create corresponding income record to balance the cash flow
+        // This represents the money that was added to pay for this expense
+        Income::create([
+            'amount' => $request->amount,
+            'description' => 'Money added for expense: ' . ($request->description ?: 'Expense'),
+            'date' => $request->expense_date,
+            'user_id' => Auth::id(), // Who added the money
+            'assigned_to_user_id' => $request->assigned_to_user_id, // Who the money is for
         ]);
 
         // Group expense logic can be added here if needed in the future
