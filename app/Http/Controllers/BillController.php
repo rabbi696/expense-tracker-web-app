@@ -97,7 +97,7 @@ class BillController extends Controller
             $bill->user->expenses()->create([
                 'amount' => $bill->amount,
                 'description' => 'Bill payment: ' . $bill->name,
-                'expense_date' => now(),
+                'expense_date' => $bill->due_date, // Use the bill's due date instead of current date
                 'user_id' => Auth::id(), // Set the user_id of the expense to the currently authenticated user
                 'assigned_to_user_id' => $request->assigned_to_user_id, // Use the selected user ID
                 'is_group_expense' => false, // Assuming bill payment is a personal expense
