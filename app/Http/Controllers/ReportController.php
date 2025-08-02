@@ -68,7 +68,7 @@ class ReportController extends Controller
         return Excel::download(new MonthlyReportExport($year, $month), $fileName, \Maatwebsite\Excel\Excel::class.'::'.strtoupper($format));
     }
 
-    public function userReport(User $user)
+    public function userReport(Request $request, User $user)
     {
         $loggedInUser = Auth::user();
         // Ensure only admin or the user themselves can view this report
@@ -76,15 +76,17 @@ class ReportController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $currentYear = Carbon::now()->year;
-        $currentMonth = Carbon::now()->month;
+        $currentYear = $request->input('year', Carbon::now()->year);
+        $currentMonth = $request->input('month', Carbon::now()->month);
 
-        // Get all expenses for the current month (for all non-admin users)
+        // Get all expenses for the selected period (for all non-admin users)
         $allExpenses = Expense::whereHas('user', function ($query) {
             $query->where('role', '!=', 'admin');
         })
             ->whereYear('expense_date', $currentYear)
-            ->whereMonth('expense_date', $currentMonth)
+            ->when($currentMonth, function ($query) use ($currentMonth) {
+                $query->whereMonth('expense_date', $currentMonth);
+            })
             ->sum('amount');
 
         // Count non-admin users
@@ -96,7 +98,9 @@ class ReportController extends Controller
         // Get this user's individual expenses for display
         $expenses = $user->expenses()->with('category')
             ->whereYear('expense_date', $currentYear)
-            ->whereMonth('expense_date', $currentMonth)
+            ->when($currentMonth, function ($query) use ($currentMonth) {
+                $query->whereMonth('expense_date', $currentMonth);
+            })
             ->get();
 
         // Calculate this user's actual total expenses
@@ -104,7 +108,9 @@ class ReportController extends Controller
 
         $totalIncome = Income::where('assigned_to_user_id', $user->id)
             ->whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
+            ->when($currentMonth, function ($query) use ($currentMonth) {
+                $query->whereMonth('date', $currentMonth);
+            })
             ->sum('amount');
 
         // Get money added by all other users (for themselves)
@@ -113,7 +119,9 @@ class ReportController extends Controller
             })
             ->where('assigned_to_user_id', '!=', $user->id)
             ->whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
+            ->when($currentMonth, function ($query) use ($currentMonth) {
+                $query->whereMonth('date', $currentMonth);
+            })
             ->sum('amount');
 
         // Get income records added by other users for this user
@@ -121,7 +129,9 @@ class ReportController extends Controller
             ->where('assigned_to_user_id', $user->id)
             ->where('user_id', '!=', $user->id)
             ->whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
+            ->when($currentMonth, function ($query) use ($currentMonth) {
+                $query->whereMonth('date', $currentMonth);
+            })
             ->orderBy('date', 'desc')
             ->get();
 
@@ -129,7 +139,9 @@ class ReportController extends Controller
         $allIncomeRecords = Income::with('user')
             ->where('assigned_to_user_id', $user->id)
             ->whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
+            ->when($currentMonth, function ($query) use ($currentMonth) {
+                $query->whereMonth('date', $currentMonth);
+            })
             ->orderBy('date', 'desc')
             ->get();
 
@@ -137,7 +149,9 @@ class ReportController extends Controller
         $selfAddedMoney = Income::where('assigned_to_user_id', $user->id)
             ->where('user_id', $user->id)
             ->whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
+            ->when($currentMonth, function ($query) use ($currentMonth) {
+                $query->whereMonth('date', $currentMonth);
+            })
             ->sum('amount');
 
         // Calculate remaining cash based on group expense logic
@@ -165,7 +179,7 @@ class ReportController extends Controller
             }
         }
 
-        return view('reports.user', compact('user', 'totalExpenses', 'allExpenses', 'totalIncome', 'remainingCash', 'dueAmount', 'totalUsersDue', 'expenses', 'categoryBreakdown', 'userActualExpenses', 'otherUsersAddedMoney', 'otherUsersIncomeRecords', 'allIncomeRecords', 'selfAddedMoney'));
+        return view('reports.user', compact('user', 'totalExpenses', 'allExpenses', 'totalIncome', 'remainingCash', 'dueAmount', 'totalUsersDue', 'expenses', 'categoryBreakdown', 'userActualExpenses', 'otherUsersAddedMoney', 'otherUsersIncomeRecords', 'allIncomeRecords', 'selfAddedMoney', 'currentYear', 'currentMonth'));
     }
 
     public function exportUserReport(User $user, $format = 'xlsx')
