@@ -1,4 +1,5 @@
-<a href="https://deepwiki.com/rabbi696/expense-tracker-web-app"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+<center> <a href="https://deepwiki.com/rabbi696/expense-tracker-web-app"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a></center>center
+</br>
 Expense Tracker Web App<br>
 Welcome to the Expense Tracker Web App! This application is a comprehensive solution for managing personal or business finances. It allows users to easily track their income and expenses, analyze cash flow, manage debts and bills, and generate insightful reports. Whether you're an individual or a team, this app provides everything you need to stay on top of your financial situation.<br>
 
