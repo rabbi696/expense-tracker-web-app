@@ -1,3 +1,5 @@
+<center> <a href="https://deepwiki.com/rabbi696/expense-tracker-web-app"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a> </center>
+</br>
 # Expense Tracker Web App
 
 A comprehensive Laravel-based web application for managing personal and business expenses, income tracking, bills management, and financial reporting. Perfect for individuals, families, or small teams who want to maintain detailed financial records and generate insightful reports.
